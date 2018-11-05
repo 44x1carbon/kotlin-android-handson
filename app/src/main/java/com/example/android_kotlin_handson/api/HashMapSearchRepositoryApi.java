@@ -15,6 +15,21 @@ public class HashMapSearchRepositoryApi implements SearchRepositoryApi {
 
     public HashMapSearchRepositoryApi() {
         this.repositoryMap = new HashMap<>();
+        repositoryMap.put("Kotlin", Arrays.asList(
+            new Repository("JetBrains/kotlin", "https://github.com/JetBrains/kotlin", 25068),
+            new Repository("shadowsocks/shadowsocks-android", "https://github.com/shadowsocks/shadowsocks-android", 18617),
+            new Repository("tipsy/profile-summary-for-github", "https://github.com/tipsy/profile-summary-for-github", 18297)
+        ));
+        repositoryMap.put("Java", Arrays.asList(
+                new Repository("iluwatar/java-design-patterns", "https://github.com/iluwatar/java-design-patterns", 40966),
+                new Repository("ReactiveX/RxJava", "https://github.com/ReactiveX/RxJava", 36124),
+                new Repository("elastic/elasticsearch", "https://github.com/elastic/elasticsearch", 35811)
+        ));
+        repositoryMap.put("Scala", Arrays.asList(
+                new Repository("apache/spark", "https://github.com/apache/spark", 19371),
+                new Repository("apache/predictionio", "https://github.com/apache/predictionio", 11509),
+                new Repository("prisma/prisma", "https://github.com/prisma/prisma", 11030)
+        ));
     }
 
     @Override
