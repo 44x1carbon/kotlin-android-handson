@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.android_kotlin_handson.api.HashMapSearchRepositoryApi;
+import com.example.android_kotlin_handson.api.RetrofitSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.SearchRepositoryApi;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -28,7 +29,7 @@ public class RepositoryListFragment extends Fragment {
     private SearchRepositoryApi api;
 
     public RepositoryListFragment() {
-        this.api = new HashMapSearchRepositoryApi();
+        this.api = new RetrofitSearchRepositoryApi();
     }
 
     /**
@@ -71,11 +72,18 @@ public class RepositoryListFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         api.searchRepositoryByLanguage(mLanguage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositoryList -> {
                     RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
                     recyclerView.setAdapter(new RecyclerAdapter(getContext(), repositoryList));
+
                 });
     }
 }
