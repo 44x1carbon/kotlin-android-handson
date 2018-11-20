@@ -12,6 +12,11 @@ import android.view.ViewGroup;
 import com.example.android_kotlin_handson.api.HashMapSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.RetrofitSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.SearchRepositoryApi;
+import com.example.android_kotlin_handson.model.Repository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
@@ -64,7 +69,7 @@ public class RepositoryListFragment extends Fragment {
 
         RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        recyclerView.setAdapter(new RecyclerAdapter(getContext(), new ArrayList<>()));
         return view;
     }
 
@@ -81,9 +86,11 @@ public class RepositoryListFragment extends Fragment {
         api.searchRepositoryByLanguage(mLanguage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositoryList -> {
-                    RecyclerView recyclerView = getView().findViewById(R.id.recyclerView);
-                    recyclerView.setAdapter(new RecyclerAdapter(getContext(), repositoryList));
-
+                    View v = getView();
+                    if (v != null) {
+                        RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
+                        recyclerView.swapAdapter(new RecyclerAdapter(getContext(), repositoryList), false);
+                    }
                 });
     }
 }
