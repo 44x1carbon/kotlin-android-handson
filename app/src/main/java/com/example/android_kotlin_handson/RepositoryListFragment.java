@@ -9,13 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android_kotlin_handson.api.HashMapSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.RetrofitSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.SearchRepositoryApi;
-import com.example.android_kotlin_handson.model.Repository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 
@@ -30,7 +27,7 @@ public class RepositoryListFragment extends Fragment {
     private static final String ARG_LANGUAGE = "ARG_LANGUAGE";
 
 
-    private String mLanguage;
+    private String language;
     private SearchRepositoryApi api;
 
     public RepositoryListFragment() {
@@ -57,7 +54,7 @@ public class RepositoryListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mLanguage = getArguments().getString(ARG_LANGUAGE);
+            language = getArguments().getString(ARG_LANGUAGE);
         }
 
     }
@@ -83,7 +80,7 @@ public class RepositoryListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        api.searchRepositoryByLanguage(mLanguage)
+        api.searchRepositoryByLanguage(language)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositoryList -> {
                     View v = getView();

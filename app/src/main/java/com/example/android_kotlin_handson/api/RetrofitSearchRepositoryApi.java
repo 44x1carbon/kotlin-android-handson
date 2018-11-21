@@ -20,13 +20,13 @@ public class RetrofitSearchRepositoryApi implements SearchRepositoryApi {
         Single<SearchResult> searchRepositoryByLanguage(@Query("q") String query);
     }
 
-    Retrofit retrofit = new Retrofit.Builder()
+    private Retrofit retrofit = new Retrofit.Builder()
             .baseUrl("https://api.github.com/")
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build();
 
-    GitHubService service = retrofit.create(GitHubService.class);
+    private GitHubService service = retrofit.create(GitHubService.class);
 
 
     @Override
