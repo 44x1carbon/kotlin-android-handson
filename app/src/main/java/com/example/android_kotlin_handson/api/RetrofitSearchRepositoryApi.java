@@ -34,6 +34,6 @@ public class RetrofitSearchRepositoryApi implements SearchRepositoryApi {
         String query = "language:" + language;
         return service.searchRepositoryByLanguage(query)
                 .subscribeOn(Schedulers.newThread())
-                .map(searchResult -> searchResult.items);
+                .map(searchResult -> searchResult.getItems());
     }
 }
