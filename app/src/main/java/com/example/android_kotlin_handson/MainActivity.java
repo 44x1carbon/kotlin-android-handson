@@ -13,13 +13,13 @@ public class MainActivity extends AppCompatActivity {
             = item -> {
                 switch (item.getItemId()) {
                     case R.id.navigation_item1:
-                        loadFragment(RepositoryListFragment.newInstance("Java"));
+                        loadFragment(RepositoryListFragment.Companion.newInstance("Java"));
                         return true;
                     case R.id.navigation_item2:
-                        loadFragment(RepositoryListFragment.newInstance("Kotlin"));
+                        loadFragment(RepositoryListFragment.Companion.newInstance("Kotlin"));
                         return true;
                     case R.id.navigation_item3:
-                        loadFragment(RepositoryListFragment.newInstance("Scala"));
+                        loadFragment(RepositoryListFragment.Companion.newInstance("Scala"));
                         return true;
                 }
                 return false;
