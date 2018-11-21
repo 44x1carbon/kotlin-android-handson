@@ -1,5 +1,3 @@
 package com.example.android_kotlin_handson.model
 
-class SearchResult {
-    var items: List<Repository>? = null
-}
+data class SearchResult(val items: List<Repository>)
