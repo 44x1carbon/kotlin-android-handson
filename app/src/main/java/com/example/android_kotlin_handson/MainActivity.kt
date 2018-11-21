@@ -9,41 +9,41 @@ import android.view.View
 
 class MainActivity : AppCompatActivity() {
 
-    private val mOnNavigationItemSelectedListener = { item ->
-        when (item.getItemId()) {
+    private val mOnNavigationItemSelectedListener = { item: MenuItem  ->
+        when (item.itemId) {
             R.id.navigation_item1 -> {
                 loadFragment(RepositoryListFragment.newInstance("Java"))
-                return true
+                true
             }
             R.id.navigation_item2 -> {
                 loadFragment(RepositoryListFragment.newInstance("Kotlin"))
-                return true
+                true
             }
             R.id.navigation_item3 -> {
                 loadFragment(RepositoryListFragment.newInstance("Scala"))
-                return true
+                true
             }
+            else -> false
         }
-        false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val navigation = findViewById<View>(R.id.navigation) as BottomNavigationView
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
-        navigation.selectedItemId = R.id.navigation_item1
+        findViewById<BottomNavigationView>(R.id.navigation).run {
+            setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+            selectedItemId = R.id.navigation_item1
+        }
     }
 
     private fun loadFragment(fragment: Fragment?): Boolean {
-        if (fragment != null) {
+        return fragment?.let {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_container, fragment)
+                    .replace(R.id.fragment_container, it)
                     .commit()
-            return true
-        }
-        return false
+            true
+        } ?: false
     }
 }
