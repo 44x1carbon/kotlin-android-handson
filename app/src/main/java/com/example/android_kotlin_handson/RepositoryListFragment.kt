@@ -10,9 +10,6 @@ import android.view.ViewGroup
 
 import com.example.android_kotlin_handson.api.RetrofitSearchRepositoryApi
 import com.example.android_kotlin_handson.api.SearchRepositoryApi
-import com.example.android_kotlin_handson.model.Repository
-
-import java.util.ArrayList
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -26,7 +23,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 class RepositoryListFragment : Fragment() {
 
 
-    private var language: String? = null
+    private val language: String by lazy {
+        arguments?.getString(ARG_LANGUAGE) ?: ""
+    }
     private val api: SearchRepositoryApi
 
     init {
@@ -35,19 +34,16 @@ class RepositoryListFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (arguments != null) {
-            language = arguments!!.getString(ARG_LANGUAGE)
-        }
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_repository_list, container, false)
 
-        val recyclerView = view.findViewById<View>(R.id.recyclerView) as RecyclerView
-        recyclerView.layoutManager = LinearLayoutManager(activity)
-        recyclerView.adapter = RecyclerAdapter(context!!, ArrayList<Repository>())
+        view.findViewById<RecyclerView>(R.id.recyclerView).run {
+            layoutManager = LinearLayoutManager(activity)
+            adapter = RecyclerAdapter(context, listOf())
+        }
         return view
     }
 
@@ -62,16 +58,15 @@ class RepositoryListFragment : Fragment() {
         api.searchRepositoryByLanguage(language!!)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { repositoryList ->
-                    val v = view
-                    if (v != null) {
-                        val recyclerView = v.findViewById<RecyclerView>(R.id.recyclerView)
+                    view?.let {
+                        val recyclerView = it.findViewById<RecyclerView>(R.id.recyclerView)
                         recyclerView.swapAdapter(RecyclerAdapter(context!!, repositoryList), false)
                     }
                 }
     }
 
     companion object {
-        private val ARG_LANGUAGE = "ARG_LANGUAGE"
+        private const val ARG_LANGUAGE = "ARG_LANGUAGE"
 
         /**
          * Use this factory method to create a new instance of
@@ -83,8 +78,9 @@ class RepositoryListFragment : Fragment() {
         // TODO: Rename and change types and number of parameters
         fun newInstance(language: String): RepositoryListFragment {
             val fragment = RepositoryListFragment()
-            val args = Bundle()
-            args.putString(ARG_LANGUAGE, language)
+            val args = Bundle().apply {
+                putString(ARG_LANGUAGE, language)
+            }
             fragment.arguments = args
             return fragment
         }
