@@ -1,7 +1,6 @@
 package com.example.android_kotlin_handson;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,42 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.android_kotlin_handson.api.HashMapSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.RetrofitSearchRepositoryApi;
 import com.example.android_kotlin_handson.api.SearchRepositoryApi;
-import com.example.android_kotlin_handson.model.Repository;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
- * Use the {@link RepositoryListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RepositoryListFragment extends Fragment {
     private static final String ARG_LANGUAGE = "ARG_LANGUAGE";
 
-
     private String mLanguage;
     private SearchRepositoryApi api;
+    private CompositeDisposable disposables;
 
     public RepositoryListFragment() {
         this.api = new RetrofitSearchRepositoryApi();
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param language
-     * @return A new instance of fragment RepositoryListFragment.
-     */
-    // TODO: Rename and change types and number of parameters
     public static RepositoryListFragment newInstance(String language) {
         RepositoryListFragment fragment = new RepositoryListFragment();
         Bundle args = new Bundle();
@@ -59,7 +41,6 @@ public class RepositoryListFragment extends Fragment {
         if (getArguments() != null) {
             mLanguage = getArguments().getString(ARG_LANGUAGE);
         }
-
     }
 
     @Override
@@ -74,16 +55,11 @@ public class RepositoryListFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
-        api.searchRepositoryByLanguage(mLanguage)
+        disposables = new CompositeDisposable();
+
+        disposables.add(api.searchRepositoryByLanguage(mLanguage)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(repositoryList -> {
                     View v = getView();
@@ -91,6 +67,15 @@ public class RepositoryListFragment extends Fragment {
                         RecyclerView recyclerView = v.findViewById(R.id.recyclerView);
                         recyclerView.swapAdapter(new RecyclerAdapter(getContext(), repositoryList), false);
                     }
-                });
+                }));
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (disposables != null) {
+            disposables.dispose();
+        }
+        disposables = null;
     }
 }

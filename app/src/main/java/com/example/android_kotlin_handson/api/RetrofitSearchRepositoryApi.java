@@ -1,13 +1,14 @@
 package com.example.android_kotlin_handson.api;
 
+import com.example.android_kotlin_handson.api.response.RepositoryEntity;
 import com.example.android_kotlin_handson.model.Repository;
-import com.example.android_kotlin_handson.model.SearchResult;
+import com.example.android_kotlin_handson.api.response.SearchResult;
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Single;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -28,12 +29,23 @@ public class RetrofitSearchRepositoryApi implements SearchRepositoryApi {
 
     GitHubService service = retrofit.create(GitHubService.class);
 
-
     @Override
     public Single<List<Repository>> searchRepositoryByLanguage(String language) {
         String query = "language:" + language;
         return service.searchRepositoryByLanguage(query)
                 .subscribeOn(Schedulers.newThread())
-                .map(searchResult -> searchResult.items);
+                .map(this::convertToModel);
+    }
+
+    private List<Repository> convertToModel(SearchResult result) {
+        List<Repository> list = new ArrayList<>();
+        for (RepositoryEntity entity: result.items) {
+            list.add(convertToRepository(entity));
+        }
+        return list;
+    }
+
+    private Repository convertToRepository(RepositoryEntity entity) {
+        return new Repository(entity.fullName, entity.htmlUrl, entity.stargazersCount);
     }
 }
