@@ -16,14 +16,11 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_item1:
-                    loadFragment(RepositoryListFragment.newInstance("Java"));
-                    return true;
+                    return loadFragment(RepositoryListFragment.newInstance("Java"));
                 case R.id.navigation_item2:
-                    loadFragment(RepositoryListFragment.newInstance("Kotlin"));
-                    return true;
+                    return loadFragment(RepositoryListFragment.newInstance("Kotlin"));
                 case R.id.navigation_item3:
-                    loadFragment(RepositoryListFragment.newInstance("Scala"));
-                    return true;
+                    return loadFragment(RepositoryListFragment.newInstance("Scala"));
             }
             return false;
         }
