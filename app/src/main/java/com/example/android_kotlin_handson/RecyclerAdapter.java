@@ -34,7 +34,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         if(mRepositoryList != null && mRepositoryList.size() > position && mRepositoryList.get(position) != null) {
             Repository repository = mRepositoryList.get(position);
-            holder.textView.setText(repository.fullName);
+            String text = String.format("[☆%s] %s", repository.stargazersCount, repository.fullName);
+            holder.textView.setText(text);
         }
     }
 
