@@ -33,7 +33,7 @@ public class RetrofitSearchRepositoryApi implements SearchRepositoryApi {
     public Single<List<Repository>> searchRepositoryByLanguage(String language) {
         String query = "language:" + language;
         return service.searchRepositoryByLanguage(query)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.io())
                 .map(this::convertToModel);
     }
 
