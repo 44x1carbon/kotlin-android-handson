@@ -22,8 +22,8 @@ class RecyclerAdapter internal constructor(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (mRepositoryList.size > position) {
-            val (fullName) = mRepositoryList[position]
-            holder.textView.text = fullName
+            val (fullName, url, star) = mRepositoryList[position]
+            holder.textView.text = "[$star] $fullName"
         }
     }
 
